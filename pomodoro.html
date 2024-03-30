@@ -5,90 +5,92 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pomodoro Study Timer</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    flex-direction: column;
-    z-index: 2;
-    overflow: hidden;
 
-  }
-  #studyForm {
-    position: relative;
-    z-index: 10; /* Ensure the form appears above the blob */
-  }
+body {
+font-family: Arial, sans-serif;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	flex-direction: column;
+	z-index: 2;
+	overflow: hidden;
 
-  #clock {
-    width: 200px;
-    height: 200px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px;
-  }
+}
+#studyForm {
+	position: relative;
+	z-index: 10; /* Ensure the form appears above the blob */
+}
 
-  .timer {
-    font-size: 2em;
-    z-index: 1;
-    color: black;
-  }
+#clock {
+	width: 200px;
+	height: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 20px;
+}
 
-  .blob {
-    width: 300px; /* Larghezza del div .blob */
-    height: 300px; /* Altezza del div .blob */
-    margin: 10% auto; /* Margini: 10% sopra e sotto, centrato orizzontalmente */
-    position: relative; /* Posizionamento relativo: utilizzato per posizionare gli pseudo-elementi ::before e ::after rispetto a questo elemento */
-    color: #fff; /* Colore del testo all'interno del div */
-    display: flex; /* Display flex per centrare il contenuto (testo o altro) all'interno del div */
-    justify-content: center; /* Allinea orizzontalmente il contenuto al centro */
-    align-items: center; /* Allinea verticalmente il contenuto al centro */
-    z-index: 0; /* Livello z-index, determina l'ordine di sovrapposizione degli elementi */
-  }
-  
-  .blob::before{
-    content: ''; /* Necessario per rendere visibile lo pseudo-elemento, anche se non contiene testo */
-    border: 2px solid #fff; /* Bordo dello pseudo-elemento */
-    border-radius: 58% 42% 48% 53% / 47% 60% 36% 53%; /* Raggio del bordo per creare forme organiche/irregolari */
-    width: 100%; /* Larghezza: occupa tutto lo spazio disponibile nel contenitore .blob */
-    height: 100%; /* Altezza: occupa tutto lo spazio disponibile nel contenitore .blob */
-    position: absolute; /* Posizionamento assoluto: posizionato rispetto al primo antenato posizionato (in questo caso .blob) */
-    left: 0; /* Allineato a sinistra del contenitore .blob */
-    top: 0; /* Allineato in alto del contenitore .blob */
-    animation-fill-mode: forwards; /* Mantiene lo stile dell'ultimo frame dell'animazione dopo che è finita */
-  }
+.timer {
+	font-size: 2em;
+	z-index: 1;
+	color: black;
+}
 
-  /*https://css-tricks.com/almanac/selectors/a/after-and-before/*/
-  
-  .blob::after{
-    content: ''; /* Analogamente a ::before, rende visibile lo pseudo-elemento */
-    border: 2px solid #fff; /* Bordo dello pseudo-elemento */
-    border-radius: 48% 42% 48% 53% / 47% 60% 36% 53%; /* Raggio del bordo per creare forme diverse rispetto a ::before */
-    width: 100%; /* Larghezza come ::before */
-    height: 100%; /* Altezza come ::before */
-    background: rgba(244, 166, 166, 0.1); /* Sfondo leggermente trasparente per differenziarlo da ::before */
-    position: absolute; /* Posizionamento assoluto come ::before */
-    left: 0; /* Allineato a sinistra come ::before */
-    top: 0; /* Allineato in alto come ::before */
-    animation-fill-mode: forwards; /* Mantiene lo stile dell'ultimo frame dell'animazione come ::before */
-  }
-  
-  @keyframes rotate {
-    0% {
-      transform: scale(1) rotate(0deg);
-      border-color: #EC0D0D;
-    }
-    50% {
-      transform: scale(3) rotate(360deg); /* Adjust the scale value at 50% as needed */
-      border-color: #f4c01c;
-    }
-    100% {
-      transform: scale(6) rotate(360deg); /* Keep rotation the same as at 50% */
-      border-color: #EC0D0D;
-    }
-  }
+.blob {
+	width: 300px; /* Larghezza del div .blob */
+	height: 300px; /* Altezza del div .blob */
+	margin: 10% auto; /* Margini: 10% sopra e sotto, centrato orizzontalmente */
+	position: relative; /* Posizionamento relativo: utilizzato per posizionare gli pseudo-elementi ::before e ::after rispetto a questo elemento */
+	color: #fff; /* Colore del testo all'interno del div */
+	display: flex; /* Display flex per centrare il contenuto (testo o altro) all'interno del div */
+	justify-content: center; /* Allinea orizzontalmente il contenuto al centro */
+	align-items: center; /* Allinea verticalmente il contenuto al centro */
+	z-index: 0; /* Livello z-index, determina l'ordine di sovrapposizione degli elementi */
+}
+
+.blob::before{
+	content: ''; /* Necessario per rendere visibile lo pseudo-elemento, anche se non contiene testo */
+	border: 2px solid #fff; /* Bordo dello pseudo-elemento */
+	border-radius: 58% 42% 48% 53% / 47% 60% 36% 53%; /* Raggio del bordo per creare forme organiche/irregolari */
+	width: 100%; /* Larghezza: occupa tutto lo spazio disponibile nel contenitore .blob */
+	height: 100%; /* Altezza: occupa tutto lo spazio disponibile nel contenitore .blob */
+	position: absolute; /* Posizionamento assoluto: posizionato rispetto al primo antenato posizionato (in questo caso .blob) */
+	left: 0; /* Allineato a sinistra del contenitore .blob */
+	top: 0; /* Allineato in alto del contenitore .blob */
+	animation-fill-mode: forwards; /* Mantiene lo stile dell'ultimo frame dell'animazione dopo che è finita */
+}
+
+/*https://css-tricks.com/almanac/selectors/a/after-and-before/*/
+
+.blob::after{
+	content: ''; /* Analogamente a ::before, rende visibile lo pseudo-elemento */
+	border: 2px solid #fff; /* Bordo dello pseudo-elemento */
+	border-radius: 48% 42% 48% 53% / 47% 60% 36% 53%; /* Raggio del bordo per creare forme diverse rispetto a ::before */
+	width: 100%; /* Larghezza come ::before */
+	height: 100%; /* Altezza come ::before */
+	background: rgba(244, 166, 166, 0.1); /* Sfondo leggermente trasparente per differenziarlo da ::before */
+	position: absolute; /* Posizionamento assoluto come ::before */
+	left: 0; /* Allineato a sinistra come ::before */
+	top: 0; /* Allineato in alto come ::before */
+	animation-fill-mode: forwards; /* Mantiene lo stile dell'ultimo frame dell'animazione come ::before */
+}
+
+@keyframes rotate {
+	0% {
+		transform: scale(1) rotate(0deg);
+		border-color: #EC0D0D;
+	}
+	50% {
+		transform: scale(3) rotate(360deg); /* Adjust the scale value at 50% as needed */
+		border-color: #f4c01c;
+	}
+	100% {
+		transform: scale(6) rotate(360deg); /* Keep rotation the same as at 50% */
+		border-color: #EC0D0D;
+	}
+}
+
 </style>
 </head>
 <body>
@@ -104,8 +106,10 @@
   </div>
   
   <script>
-// Aggiunge un listener per l'evento di submit al form con id 'studyForm'
-document.getElementById('studyForm').addEventListener('submit', function(event) {
+
+let currentInterval;
+
+function startTimer(event){
   // Previene il comportamento di default dell'evento, che sarebbe il submit del form
   event.preventDefault();
 
@@ -125,17 +129,24 @@ document.getElementById('studyForm').addEventListener('submit', function(event) 
   document.head.appendChild(styleSheet);
 
   // Calcola il tempo di fine aggiungendo la durata del timer al tempo corrente
-  const endTime = Date.now() + studyTime * 60000; 
+  endTime = Date.now() + studyTime * 60000; 
 
+  if(currentInterval){
+    // reset
+    clearInterval(currentInterval);
+    currentInterval = null;
+  }
+  document.getElementById('timerDisplay').textContent = `${String(studyTime).padStart(2, '0')}:00`; 
   // Imposta un intervallo che si ripete ogni secondo
-  const interval = setInterval(function() {
+  currentInterval = setInterval(function(){
     const now = Date.now();
     // Calcola la differenza tra il tempo di fine e il tempo corrente
     const difference = endTime - now;
-    
+
     // Se la differenza è minore o uguale a 0, ferma l'intervallo
     if (difference <= 0) {
-      clearInterval(interval);
+      clearInterval(currentInterval);
+      currentInterval = null;
       // Pulisce il testo dell'elemento con id 'timerDisplay'
       document.getElementById('timerDisplay').textContent = ""; 
       return;
@@ -144,15 +155,16 @@ document.getElementById('studyForm').addEventListener('submit', function(event) 
     // Calcola i minuti e i secondi rimanenti
     const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-    
+
     // Visualizza il tempo rimanente nell'elemento con id 'timerDisplay'
-   //padstart aggiunge uno zero prima della stringa se non raggiunge almeno una lunghezza di 2
+    //padstart aggiunge uno zero prima della stringa se non raggiunge almeno una lunghezza di 2
     document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }, 1000);
-});
+}
 
-    
+// Aggiunge un listener per l'evento di submit al form con id 'studyForm'
+document.getElementById('studyForm').addEventListener('submit', startTimer);    
   </script>
   
-  </body>
-  </html>
+</body>
+</html>
