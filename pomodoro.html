@@ -155,8 +155,9 @@ document.getElementById('studyForm').addEventListener('submit', function(event){
   
   // Ottiene il tempo di studio inserito dall'utente e lo converte in un numero intero
   const studyTime = parseInt(document.getElementById('studyTime').value, 10);
+  const breakTime = parseInt(document.getElementById('breakTime').value, 10);
   // Converte i minuti in secondi per l'animazione
-  const animationDuration = studyTime * 60; 
+  const animationDuration = (studyTime + breakTime) * 60;
   
   // rimuove la vecchia animazione
   if(styleSheet){ document.head.removeChild(styleSheet); }
@@ -169,10 +170,11 @@ document.getElementById('studyForm').addEventListener('submit', function(event){
   
   // Calcola il tempo di fine aggiungendo la durata del timer al tempo corrente
   endTime = Date.now() + studyTime * 60000; 
-   
+  
   document.getElementById('timerDisplay').textContent = `${String(studyTime).padStart(2, '0')}:00`;
   // Imposta un intervallo che si ripete ogni secondo
   currentInterval = setInterval(timer, 1000, endTime);
+  // setInterval for break time ?..
 });
 
   </script>
