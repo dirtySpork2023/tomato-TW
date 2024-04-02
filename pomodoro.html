@@ -69,17 +69,18 @@ font-family: Arial, sans-serif;
 	border-radius: 48% 42% 48% 53% / 47% 60% 36% 53%; /* Raggio del bordo per creare forme diverse rispetto a ::before */
 	width: 100%; /* Larghezza come ::before */
 	height: 100%; /* Altezza come ::before */
-	background: rgba(244, 166, 166, 0.1); /* Sfondo leggermente trasparente per differenziarlo da ::before */
+	background: rgba(244, 166, 166, 0.3); /* Sfondo leggermente trasparente per differenziarlo da ::before */
 	position: absolute; /* Posizionamento assoluto come ::before */
 	left: 0; /* Allineato a sinistra come ::before */
 	top: 0; /* Allineato in alto come ::before */
 	animation-fill-mode: forwards; /* Mantiene lo stile dell'ultimo frame dell'animazione come ::before */
 }
 
-@keyframes rotate {
+@keyframes studyAnimation {
 	0% {
 		transform: scale(1) rotate(0deg);
 		border-color: #EC0D0D;
+		
 	}
 	50% {
 		transform: scale(3) rotate(360deg); /* Adjust the scale value at 50% as needed */
@@ -88,6 +89,21 @@ font-family: Arial, sans-serif;
 	100% {
 		transform: scale(6) rotate(360deg); /* Keep rotation the same as at 50% */
 		border-color: #EC0D0D;
+	}
+}
+
+@keyframes breakAnimation {
+	0% {
+		transform: scale(1) rotate(0deg);
+		border-color: #0D0DEC;
+	}
+	50% {
+		transform: scale(3) rotate(-360deg); /* Adjust the scale value at 50% as needed */
+		border-color: #1cc0f4;
+	}
+	100% {
+		transform: scale(6) rotate(-360deg); /* Keep rotation the same as at 50% */
+		border-color: #0D0DEC;
 	}
 }
 
@@ -106,7 +122,7 @@ font-family: Arial, sans-serif;
   </form>
   
   <div id="clock" class="blob">
-    <p class="timer" id="timerMode">study </p>
+    <p class="timer" id="timerMode">study_</p>
     <div class="timer" id="timerDisplay">00:00</div>
   </div>
   
@@ -126,23 +142,18 @@ function resetAnimation() {
 
 function timer(studyTime, breakTime){
   // Calcola il tempo di fine aggiungendo la durata del timer al tempo corrente
-  if(!endTime) endTime = Date.now()
-
-  const now = Date.now();
-  const difference = endTime - now;
+  const difference = (endTime ? endTime - Date.now() : -1);
   
   // Se la differenza è minore a 0, ferma l'intervallo
   if(difference <= 0 && repeats <= 0){
 	clearInterval(currentInterval);
 	currentInterval = null;
 	// Pulisce il testo dell'elemento con id 'timerDisplay'
-	document.getElementById('timerMode').textContent = ""; 
-	document.getElementById('timerDisplay').textContent = ""; 
-	return;
+	document.getElementById('timerMode').textContent = "";
+	document.getElementById('timerDisplay').textContent = "00:00";
   }else if( difference <= 0 ){
     document.getElementById('timerMode').textContent = (repeats%2==0 ? 'study_' : 'break_');
     endTime = Date.now() + (repeats%2==0 ? studyTime : breakTime ) * 4000;
-    repeats--;
    
     // Converte i minuti in secondi per l'animazione
     const animationDuration = (repeats%2==0 ? studyTime : breakTime) * 4;
@@ -152,17 +163,20 @@ function timer(studyTime, breakTime){
     resetAnimation();
     // Imposta l'animazione con durata dinamica per gli pseudo-elementi ::before e ::after
     styleSheet = document.createElement("style");
-    styleSheet.innerText = `.blob::before, .blob::after {animation: rotate ${animationDuration}s linear forwards;}`;
+    styleSheet.innerText = `.blob::before, .blob::after {animation: ${repeats%2==0 ? 'study' : 'break'}Animation ${animationDuration}s linear forwards;}`;
     document.head.appendChild(styleSheet);
+
+    document.getElementById('timerDisplay').textContent = `${String(repeats%2==0 ? studyTime : breakTime).padStart(2, '0')}:00`;
+    repeats--;
+  }else{
+    // Calcola i minuti e i secondi rimanenti
+    const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+    
+    // Visualizza il tempo rimanente nell'elemento con id 'timerDisplay'
+    //padstart aggiunge uno zero prima della stringa se non raggiunge almeno una lunghezza di 2
+    document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
-  
-  // Calcola i minuti e i secondi rimanenti
-  const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((difference % (1000 * 60)) / 1000);
-  
-  // Visualizza il tempo rimanente nell'elemento con id 'timerDisplay'
-  //padstart aggiunge uno zero prima della stringa se non raggiunge almeno una lunghezza di 2
-  document.getElementById('timerDisplay').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 // Aggiunge un listener per l'evento di submit al form con id 'studyForm'
