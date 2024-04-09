@@ -20,28 +20,31 @@
 		}
 	
 		#studyForm {
-			position: relative;
 			z-index: 10;
 			/* Ensure the form appears above the blob */
-			background-color: #fff;
+			background-color: #f8f8f8;
 			padding: 20px;
 			border-radius: 10px;
 			box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 		}
 	
 		#studyForm label {
+			width: 10em;
 			font-size: 1.2em;
 			margin-bottom: 5px;
+			float: left;
+			clear: left;
 		}
 	
 		#studyForm input[type="number"] {
-			width: 100px;
-			height: 30px;
+			width: 50px;
+
 			border: 1px solid #ccc;
 			border-radius: 5px;
 			margin-bottom: 10px;
 			padding: 5px;
 			font-size: 1em;
+			float: left;
 		}
 	
 		#studyForm button {
@@ -53,6 +56,8 @@
 			cursor: pointer;
 			font-size: 1.2em;
 			transition: background-color 0.3s ease;
+			float: left;
+			clear: left;
 		}
 	
 		#studyForm button:hover {
@@ -64,6 +69,7 @@
 			height: 200px;
 			display: flex;
 			justify-content: center;
+			flex-direction: column;
 			align-items: center;
 			margin: 20px;
 		}
@@ -89,8 +95,7 @@
 			background: orange;
 			box-shadow: 0 0 10px orange, 0 0 60px orange, 0 0 200px yellow, inset 0 0 80px yellow;
 			z-index: -99;
-			animation: rotation1 linear both 1s;
-			animation-duration: 0s;
+
 		}
 	
 		@keyframes rotation1 {
@@ -115,7 +120,6 @@
 			box-shadow: 5px 0 10px 3px rgba(229, 229, 229, 0.3), 0 0 10px 2px rgba(229, 229, 229, 0.3), 5px 0 10px 3px rgba(229, 229, 229, 0.3), 0px 0 3px 2px rgba(229, 229, 229, 0.3);
 			z-index: -99;
 			animation: rotation2 linear both 1s;
-			animation-duration: 0s;
 		}
 	
 		@keyframes rotation2 {
@@ -133,22 +137,20 @@
 <body>
 
 	<form id="studyForm">
-		<label for="studyTime">Enter study time in minutes:</label>
+		<label for="studyTime">Study time in minutes:</label>
 		<input type="number" id="studyTime" name="studyTime" min="1" required>
-		<label for="breakTime">Enter break time in minutes:</label>
+		<label for="breakTime">Break time in minutes:</label>
 		<input type="number" id="breakTime" name="breakTime" min="1" required>
-		<label for="repeats">Enter number of cycles:</label>
+		<label for="repeats">Number of cycles:</label>
 		<input type="number" id="repeats" name="repeats" min="1" required>
-		<button type="submit">Start Studying</button>
+		<button type="submit">Start studying</button>
 	</form>
 
 	<div id="clock" class="blob">
-		<p class="timer" id="timerMode">study_</p>
 		<div class="timer" id="timerDisplay">00:00</div>
+		<p class="timer" id="timerMode"></p>
 	</div>
-
 	<div class="sun"></div>
-
 	<div class="moon"></div>
 
 	<script>
@@ -165,7 +167,7 @@
 			el.style.animation = null;
 		}
 
-	function timer(studyTime, breakTime) {
+		function timer(studyTime, breakTime) {
 			// Calcola il tempo di fine aggiungendo la durata del timer al tempo corrente
 			const difference = (endTime ? endTime - Date.now() : -1);
 
@@ -183,36 +185,28 @@
 				document.querySelector('.moon').style.visibility = 'hidden';
 			} else if (difference <= 0) {
 				const isStudyTime = repeats % 2 == 0;
-				document.getElementById('timerMode').textContent = (isStudyTime ? 'study_' : 'break_');
+				document.getElementById('timerMode').textContent = (isStudyTime ? 'study' : 'break');
 				endTime = Date.now() + (isStudyTime ? studyTime : breakTime) * 4000;
 
 				// Converte i minuti in secondi per l'animazione
 				const animationDuration = (isStudyTime ? studyTime : breakTime) * 4;
-
-				// rimuove la vecchia animazione
-				if (styleSheet) document.head.removeChild(styleSheet);
-				resetAnimation();
-				// Imposta l'animazione con durata dinamica per gli pseudo-elementi ::before e ::after
-				styleSheet = document.createElement("style");
-				document.head.appendChild(styleSheet);
-
+				
 				// Imposta l'animazione del sole o della luna con la durata aggiornata
 				const sun = document.querySelector('.sun');
 				const moon = document.querySelector('.moon');
 				sun.style.animation = (isStudyTime ? `rotation1 linear both ${animationDuration}s` : 'none');
 				moon.style.animation = (isStudyTime ? 'none' : `rotation2 linear both ${animationDuration}s`);
-
-
+				
 				// Rende visibile solo l'elemento animato
 				sun.style.visibility = (isStudyTime ? 'visible' : 'hidden');
 				moon.style.visibility = (isStudyTime ? 'hidden' : 'visible');
-
+				
 				if (isStudyTime) {
 					document.body.classList.remove('moon-animation');
 				} else {
 					document.body.classList.add('moon-animation');
 				}
-
+				
 				document.getElementById('timerDisplay').textContent = `${String(isStudyTime ? studyTime : breakTime).padStart(2, '0')}:00`;
 				repeats--;
 			} else {
@@ -238,6 +232,7 @@
 				clearInterval(currentInterval);
 				currentInterval = null;
 				endTime = null;
+				resetAnimation();
 			}
 
 			// Ottiene i dati inseriti dall'utente
@@ -247,6 +242,7 @@
 
 			// Imposta un intervallo che si ripete ogni secondo
 			currentInterval = setInterval(timer, 1000, studyTime, breakTime);
+			timer(studyTime, breakTime);
 		});
 
 	</script>
