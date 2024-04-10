@@ -88,49 +88,41 @@
 		.sun {
 			display: inline-block;
 			position: absolute;
-			transform-origin: bottom;
+			top: 50vh;
+			transform-origin: center;
 			border-radius: 50%;
-			height: 200px;
-			width: 200px;
+			height: 20vh;
+			width: 20vh;
 			background: orange;
 			box-shadow: 0 0 10px orange, 0 0 60px orange, 0 0 200px yellow, inset 0 0 80px yellow;
 			z-index: -99;
-
+			transform: rotate(-270deg) translate(50vh)
 		}
 	
-		@keyframes rotation1 {
+		@keyframes rotation {
 			from {
-				transform: rotate(-220deg) translate(400px)
+				transform: rotate(-270deg) translate(50vh)
 			}
 	
 			to {
-				transform: rotate(90deg) translate(400px)
+				transform: rotate(90deg) translate(50vh)
 			}
 		}
 	
 		.moon {
 			visibility: hidden;
 			position: absolute;
-			transform-origin: bottom;
+			top: 50vh;
+			transform-origin: center;
 			display: inline-block;
 			background-color: #f3f2e9;
-			width: 200px;
-			height: 200px;
+			width: 20vh;
+			height: 20vh;
 			border-radius: 50%;
 			box-shadow: 5px 0 10px 3px rgba(229, 229, 229, 0.3), 0 0 10px 2px rgba(229, 229, 229, 0.3), 5px 0 10px 3px rgba(229, 229, 229, 0.3), 0px 0 3px 2px rgba(229, 229, 229, 0.3);
 			z-index: -99;
-			animation: rotation2 linear both 1s;
 		}
 	
-		@keyframes rotation2 {
-			from {
-				transform: rotate(-220deg) translate(350px)
-			}
-	
-			to {
-				transform: rotate(90deg) translate(350px)
-			}
-		}
 	</style>
 </head>
 
@@ -186,16 +178,16 @@
 			} else if (difference <= 0) {
 				const isStudyTime = repeats % 2 == 0;
 				document.getElementById('timerMode').textContent = (isStudyTime ? 'study' : 'break');
-				endTime = Date.now() + (isStudyTime ? studyTime : breakTime) * 4000;
+				endTime = Date.now() + (isStudyTime ? studyTime : breakTime) * 60000;
 
 				// Converte i minuti in secondi per l'animazione
-				const animationDuration = (isStudyTime ? studyTime : breakTime) * 4;
+				const animationDuration = (isStudyTime ? studyTime : breakTime) * 60;
 				
 				// Imposta l'animazione del sole o della luna con la durata aggiornata
 				const sun = document.querySelector('.sun');
 				const moon = document.querySelector('.moon');
-				sun.style.animation = (isStudyTime ? `rotation1 linear both ${animationDuration}s` : 'none');
-				moon.style.animation = (isStudyTime ? 'none' : `rotation2 linear both ${animationDuration}s`);
+				sun.style.animation = (isStudyTime ? `rotation linear both ${animationDuration}s` : 'none');
+				moon.style.animation = (isStudyTime ? 'none' : `rotation linear both ${animationDuration}s`);
 				
 				// Rende visibile solo l'elemento animato
 				sun.style.visibility = (isStudyTime ? 'visible' : 'hidden');
